@@ -1,0 +1,34 @@
+---
+- name: Install PostgreSQL repository
+  dnf:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/F-40-x86_64/pgdg-fedora-repo-latest.noarch.rpm
+    state: present
+    disable_gpg_check: yes
+
+- name: Disable default postgresql module
+  command: dnf -qy module disable postgresql
+  changed_when: false
+
+- name: Install PostgreSQL 17
+  dnf:
+    name:
+      - postgresql17
+      - postgresql17-server
+      - postgresql17-contrib
+    state: present
+
+- name: Check if PostgreSQL is initialized
+  stat:
+    path: /var/lib/pgsql/17/data/PG_VERSION
+  register: pg_data
+
+- name: Initialize PostgreSQL
+  command: /usr/pgsql-17/bin/postgresql-17-setup initdb
+  when: not pg_data.stat.exists
+
+- name: Enable and start PostgreSQL service
+  service:
+    name: postgresql-17
+    state: started
+    enabled: yes
+

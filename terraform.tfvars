@@ -1,10 +1,10 @@
 # Hetzner Cloud API Token
 # REPLACE THIS with your actual token
-hcloud_token = "replace_with_your_actual_token_here"
+hcloud_token = "1tlkb0Ja3D3DnHnkCNleAM4pNT2AE5puDKU5A5gYb9FjHJzfg4gpctibqcjZDYoY"
 
 # Server Configuration
 server_name     = "control"
-server_image    = "fedora-40"
+server_image    = "fedora-41"
 server_location = "nbg1"    # Nuremberg
 server_type     = "ccx23"   # 4 vCPU, 16 GB RAM
 

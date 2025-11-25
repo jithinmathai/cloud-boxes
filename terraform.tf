@@ -97,6 +97,7 @@ resource "hcloud_server" "control" {
   keep_disk   = var.keep_disk
   ssh_keys    = var.ssh_keys
   firewall_ids = [hcloud_firewall.common-firewall.id]
+  allow_deprecated_images = true
 }
 
 output "control_public_ip4" {

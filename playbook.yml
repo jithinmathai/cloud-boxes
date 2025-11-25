@@ -4,6 +4,7 @@
   roles:
      - base
      - docker
+     - postgres
 
   vars_files:
     - vars.yml
