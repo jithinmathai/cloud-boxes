@@ -55,8 +55,32 @@
     notify:
       - restart sshd
 
+  - name: Install SELinux tools (required for custom SSH port)
+    dnf:
+      name: policycoreutils-python-utils
+      state: present
+    when: ssh_port != 22
+
+  - name: Allow custom SSH port in SELinux
+    command: semanage port -a -t ssh_port_t -p tcp {{ ssh_port }}
+    ignore_errors: yes  # Ignore if port is already defined
+    when: ssh_port != 22
+
+  - name: Allow custom SSH port in Firewalld
+    firewalld:
+      port: "{{ ssh_port }}/tcp"
+      permanent: yes
+      state: enabled
+      immediate: yes
+    when: ssh_port != 22
+    ignore_errors: yes # In case firewalld is not running/installed yet
+
   - name: Change SSH port
-    lineinfile: dest=/etc/ssh/sshd_config regexp="^#Port 22" line="Port xxxxx" state=present
+    lineinfile: 
+      dest: /etc/ssh/sshd_config 
+      regexp: "^#?Port" 
+      line: "Port {{ ssh_port }}" 
+      state: present
     notify:
       - restart sshd
 
